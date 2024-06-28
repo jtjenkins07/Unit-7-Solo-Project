@@ -1,14 +1,14 @@
 package com.basecamp.contactmanager;
 
 public class Group {
-    private int groupID;
+    private int groupId;
     private String name;
 
-    public int getGroupID() {
-        return groupID;
+    public int getGroupId() {
+        return groupId;
     }
-    public void setGroupID(int groupID) {
-        this.groupID = groupID;
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
     }
     public String getName() {
         return name;
@@ -20,7 +20,7 @@ public class Group {
     @Override
     public String toString() {
         return "Group{" +
-                "groupID=" + groupID +
+                "groupId=" + groupId +
                 ", name='" + name + '\'' +
                 '}';
     }

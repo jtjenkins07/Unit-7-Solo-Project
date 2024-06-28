@@ -8,8 +8,8 @@ public class Contact {
     private String address;
     private Group group;
 
-    public Contact(int contactID, String name, String phone, String email, String address, Group group) {
-        this.contactId = contactID;
+    public Contact(int contactId, String name, String phone, String email, String address, Group group) {
+        this.contactId = contactId;
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -47,7 +47,7 @@ public class Contact {
     public void setAddress(String address) {
         this.address = address;
     }
-    public Group group() {
+    public Group getGroup() {
         return group;
     }
     public void setGroup(Group group) {
