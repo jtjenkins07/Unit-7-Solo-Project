@@ -5,9 +5,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DbFunctions {
-    private static final String URL = "";
-    private static final String USER = "";
-    private static final String PASSWORD = "";
+    private static final String URL = "jdbc:postgresql://localhost:5432/contactdb";
+    private static final String USER = "postgres";
+    private static final String PASSWORD = "jenkins38922";
 
     static Connection getConnection() {
         try {

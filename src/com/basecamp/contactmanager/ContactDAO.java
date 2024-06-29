@@ -1,51 +1,67 @@
 package com.basecamp.contactmanager;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ContactDAO {
-    public void createContact(Contact contact){
-        String sql ="INSERT INTO contacts (name, phone, email, address, group_id) VALUES (?, ?, ?, ?, ?)";
+
+    public void createContact(Contact contact) {
+        String sql = "INSERT INTO contacts (name, phone, email, address, group_id) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DbFunctions.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, contact.getName());
-            stmt.setString(2,contact.getPhone());
+            stmt.setString(2, contact.getPhone());
             stmt.setString(3, contact.getEmail());
             stmt.setString(4, contact.getAddress());
             stmt.setInt(5, contact.getGroup().getGroupId());
             stmt.executeUpdate();
-        } catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-}
 
-    public List<Contact> getAllContacts(){
+    public List<Contact> getAllContacts() {
         List<Contact> contacts = new ArrayList<>();
         String sql = "SELECT * FROM contacts";
         try (Connection conn = DbFunctions.getConnection();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql)){
-            while(rs.next()){
-                int groupID = rs.getInt("group_id");
-                Group group = getGroup
-                Contact contact = new Contact(
-                rs.getInt("id"),
-                rs.getString("name"),
-                rs.getString("phone"),
-                rs.getString("email"),
-                rs.getString("address"),
-                group
-                );
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                int contactID = rs.getInt("id");
+                String contactName = rs.getString("name");
+                String contactPhone = rs.getString("phone");
+                String contactEmail = rs.getString("email");
+                String contactAddress = rs.getString("address");
+                int groupId = rs.getInt("group_id");
+                String groupName = rs.getString("name");
+                Group group = new Group(groupId, groupName);
+                Contact contact = new Contact(contactID, contactName, contactPhone, contactEmail, contactAddress, group);
+                contacts.add(contact);
             }
-        } catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return contacts;
     }
-    public void updateContact(Contact contact){
-        String sql = "UPDATE contacts SET name = ?, phone = ?, email = ?, address = ?, groupID = ? WHERE id = ?";
+
+    private Group getGroupByID(int groupId) {
+        String sql = "SELECT * FROM groups where id = ?";
+        try (Connection conn = DbFunctions.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)){
+                 stmt.setInt(1, groupId);
+                 ResultSet rs = stmt.executeQuery();
+                 if (rs.next()){
+                     return new Group(rs.getInt("group_id"), rs.getString("name"));
+                 }
+        } catch (SQLException e){
+                 e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void updateContact(Contact contact) {
+        String sql = "UPDATE contacts SET name = ?, phone = ?, email = ?, address = ?, group_id = ? WHERE id = ?";
         try (Connection conn = DbFunctions.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, contact.getName());
@@ -70,4 +86,4 @@ public class ContactDAO {
             e.printStackTrace();
         }
     }
-    }
+}
