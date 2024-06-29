@@ -7,11 +7,10 @@ import java.sql.Statement;
 public class DbFunctions {
     private static final String URL = "jdbc:postgresql://localhost:5432/contactdb";
     private static final String USER = "postgres";
-    private static final String PASSWORD = "jenkins38922";
+    private static final String PASSWORD = "jenkins662";
 
     static Connection getConnection() {
         try {
-            System.out.println("Connection Established.");
             return DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (SQLException e) {
             throw new RuntimeException("Connection Failed.", e);

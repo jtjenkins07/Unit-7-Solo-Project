@@ -28,18 +28,60 @@ public class Main {
                     System.out.println("Choose Category: [1]Family [2]Friend [3] Coworker ");
                     int category = scanner.nextInt();
                     scanner.nextLine();
-                    Group group = new Group(category,null);
-                    Contact contact = new Contact(0,name,phone,email,address, group);
+                    Group group = null;
+                    switch (category){
+                        case 1:
+                            group = new Group(1, null);
+                            break;
+                        case 2:
+                            group = new Group(2, null);
+                            break;
+                        case 3:
+                            group = new Group(3, null);
+                            break;
+                        default:
+                            System.out.println("Invalid choice. Contact not created.");
+                            continue;
+                    }
+                    Contact contact = new Contact(0,name,phone,email,address,group);
                     contactDAO.createContact(contact);
+                    System.out.println("Contact created.");
                     break;
                     case 2:
-                    System.out.println("2");
+                        List<Contact> contacts = contactDAO.getAllContacts();
+                        for (Contact contactList : contacts){
+                            System.out.println(contactList);
+                        }
                     break;
                     case 3:
-                    System.out.println("3");
+                        System.out.println("Enter ID of contact to update: ");
+                        int contactId = scanner.nextInt();
+                        scanner.nextLine();
+                        System.out.println("Enter new name: ");
+                        String newName = scanner.nextLine();
+                        System.out.println("Enter new phone number: ");
+                        String newPhone = scanner.nextLine();
+                        System.out.println("Enter new email: ");
+                        String newEmail = scanner.nextLine();
+                        System.out.println("Enter new address: ");
+                        String newAddress = scanner.nextLine();
+                        System.out.println("Enter new group ID: ");
+                        int newGroupId = scanner.nextInt();
+                        Group newGroup = new Group(newGroupId, null);
+                        Contact updatedContact = new Contact(contactId,newName,newPhone,newEmail,newAddress,newGroup);
+                        contactDAO.updateContact(updatedContact);
+                        scanner.nextLine();
+
                     break;
                     case 4:
-                    System.out.println("4");
+                        System.out.println("Enter ID of contact to delete: ");
+                        int idToDelete = scanner.nextInt();
+                        scanner.nextLine();
+                        if (contactDAO.deleteContact(idToDelete)){
+                            System.out.println("Contact Deleted.");
+                        } else{
+                            System.out.println("Contact not found, could not be deleted.");
+                        }
                     break;
                     case 5:
                     System.out.println("Exiting...");

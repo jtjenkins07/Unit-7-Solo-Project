@@ -23,7 +23,10 @@ public class ContactDAO {
 
     public List<Contact> getAllContacts() {
         List<Contact> contacts = new ArrayList<>();
-        String sql = "SELECT * FROM contacts";
+        String sql = "SELECT c.*, g.name as group_name " + "FROM contacts c " +
+                "JOIN groups g on c.group_id = g.id";
+//        String sql = "SELECT * FROM contacts";
+
         try (Connection conn = DbFunctions.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
@@ -34,13 +37,16 @@ public class ContactDAO {
                 String contactEmail = rs.getString("email");
                 String contactAddress = rs.getString("address");
                 int groupId = rs.getInt("group_id");
-                String groupName = rs.getString("name");
+                String groupName = rs.getString("group_name");
                 Group group = new Group(groupId, groupName);
                 Contact contact = new Contact(contactID, contactName, contactPhone, contactEmail, contactAddress, group);
                 contacts.add(contact);
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        if (contacts.isEmpty()){
+            System.out.println("No contacts found.");
         }
         return contacts;
     }
@@ -52,7 +58,7 @@ public class ContactDAO {
                  stmt.setInt(1, groupId);
                  ResultSet rs = stmt.executeQuery();
                  if (rs.next()){
-                     return new Group(rs.getInt("group_id"), rs.getString("name"));
+                     return new Group(rs.getInt("group_id"),rs.getString("group_name"));
                  }
         } catch (SQLException e){
                  e.printStackTrace();
@@ -76,14 +82,17 @@ public class ContactDAO {
         }
     }
 
-    public void deleteContact(int contactId) {
+    public boolean deleteContact(int contactId) {
         String sql = "DELETE FROM contacts WHERE id = ?";
+        boolean isDeleted;
         try (Connection conn = DbFunctions.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, contactId);
-            stmt.executeUpdate();
+            int rowsDeleted = stmt.executeUpdate();
+            return rowsDeleted > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
 }
