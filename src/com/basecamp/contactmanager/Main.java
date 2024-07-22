@@ -1,4 +1,5 @@
 package com.basecamp.contactmanager;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -75,14 +76,18 @@ public class Main {
                     break;
                     case 4:
                         System.out.println("Enter ID of contact to delete: ");
-                        int idToDelete = scanner.nextInt();
-                        scanner.nextLine();
-                        if (contactDAO.deleteContact(idToDelete)){
-                            System.out.println("Contact Deleted.");
-                        } else{
-                            System.out.println("Contact not found, could not be deleted.");
+                        try {
+                            int idToDelete = scanner.nextInt();
+                            scanner.nextLine();
+                            if (contactDAO.deleteContact(idToDelete)){
+                                System.out.println("Contact Deleted.");
+                            } else{
+                                System.out.println("Contact not found, could not be deleted.");
+                            }
+                        }catch(InputMismatchException e){
+                            System.out.println("Invalid input type, please enter a numeric value.");
+                            scanner.nextLine();
                         }
-                    break;
                     case 5:
                     System.out.println("Exiting...");
                     scanner.close();
