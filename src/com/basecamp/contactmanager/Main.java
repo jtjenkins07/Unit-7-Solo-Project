@@ -56,6 +56,7 @@ public class Main {
                     break;
                     case 3:
                         System.out.println("Enter ID of contact to update: ");
+                        try{
                         int contactId = scanner.nextInt();
                         scanner.nextLine();
                         System.out.println("Enter new name: ");
@@ -72,7 +73,10 @@ public class Main {
                         Contact updatedContact = new Contact(contactId,newName,newPhone,newEmail,newAddress,newGroup);
                         contactDAO.updateContact(updatedContact);
                         scanner.nextLine();
-
+                        }catch(InputMismatchException e){
+                            System.out.println("Invalid input type, please enter a numeric value.");
+                            scanner.nextLine();
+                        }
                     break;
                     case 4:
                         System.out.println("Enter ID of contact to delete: ");
@@ -88,6 +92,10 @@ public class Main {
                             System.out.println("Invalid input type, please enter a numeric value.");
                             scanner.nextLine();
                         }
+<<<<<<< HEAD
+=======
+                        break;
+>>>>>>> 776a64930bb4c274fdb73550cb9ac2537b1dd4d1
                     case 5:
                     System.out.println("Exiting...");
                     scanner.close();
